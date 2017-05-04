@@ -28,6 +28,8 @@ def mat_generate(A,n,p):
             
     return A
 
+# This should return the new state
+# separate the component of actually fetching the payoff
 def game_step(players,history,n,N):
     space = (N*n+1)*(n+1)
     A = np.zeros([space,space])
@@ -53,6 +55,16 @@ def game_step(players,history,n,N):
     row,col = coord_simple(players[1].num_coins_hand,guesses[1],players[0].num_coins_hand,guesses[0])
     payoff[1] = Q2[int(row),int(col)]
     return payoff
+
+# Update the Qs in
+# j,k = #nr of players
+# i,l = #nr of coins 
+
+# Current frequency
+# x_i^j = e^(b*Q_i^j)/Z 
+# y_i^j = OBSERVED frequency (i.e. history)
+# Update weights for choice
+# Q_i^j (t+1) = (1-alpha)Q_i^j + sum_l P(i,l)  y^k
 
 realisations = 1
 n = 2 # number of coins
