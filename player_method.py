@@ -19,7 +19,7 @@ class PlayerRand(Player):
 
     def choose_hand(self,history):
         self.num_coins_hand = random.randint(0,self.num_coins)
-        return self.num_coins_hand
+        #return self.num_coins_hand
 
     def make_prediction(self,previous_guesses,history):
         while True:
@@ -32,10 +32,26 @@ class PlayerMean(Player):
 
     def choose_hand(self,history):
         self.num_coins_hand = random.randint(0,self.num_coins)
-        return self.num_coins_hand
+        #return self.num_coins_hand
 
     def make_prediction(self,previous_guesses,history):
         game_prediction = round(self.num_coins*(self.num_players-1)/2) + self.num_coins_hand
+        possible_predictions = range(self.num_coins_hand,self.num_coins*self.num_players)
+        ordered_predicitions = nsmallest(len(possible_predictions), possible_predictions, key=lambda x: abs(x-game_prediction))
+        for predicition in ordered_predicitions:
+            if not predicition in previous_guesses:
+                self.game_prediction = predicition
+                return predicition
+            
+class PlayerExEx(Player):
+
+    def choose_hand(self,history):
+        self.num_coins_hand = random.randint(0,self.num_coins)
+
+    def make_predicition(self,previous_guesses,history):
+        information = [x - round(self.num_coins*(self.num_players-1)/2) for x in previous_guesses]
+        expected_remaining = round(self.num_coins*(self.num_players - 1 - len(information)))
+        game_prediction = expected_remaining + sum(information) + self.num_coins_hand
         possible_predictions = range(self.num_coins_hand,self.num_coins*self.num_players)
         ordered_predicitions = nsmallest(len(possible_predictions), possible_predictions, key=lambda x: abs(x-game_prediction))
         for predicition in ordered_predicitions:
