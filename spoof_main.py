@@ -28,11 +28,7 @@ def mat_generate(A,n,p):
             
     return A
 
-def game_step(players,history,n,N):
-    space = (N*n+1)*(n+1)
-    A = np.zeros([space,space])
-    Q1 = mat_generate(A,n,1)
-    Q2 = mat_generate(A,n,2)
+def game_step(players,history,N,P):
     payoff = np.zeros(N)
     guesses = np.zeros(N)
     coins = np.zeros(N)
@@ -48,16 +44,23 @@ def game_step(players,history,n,N):
     #    row,col = coord(N,total_coins,players)
     #    payoff[i] = Q[row,col]
     row,col = coord_simple(players[0].num_coins_hand,guesses[0],players[1].num_coins_hand,guesses[1])
-    
-    payoff[0] = Q1[int(row),int(col)]
+    payoff[0] = P[0][int(row),int(col)]
     row,col = coord_simple(players[1].num_coins_hand,guesses[1],players[0].num_coins_hand,guesses[0])
-    payoff[1] = Q2[int(row),int(col)]
+    payoff[1] = P[1][int(row),int(col)]
     return payoff
+
+def full_game(players,n,N,realisations):
+    space = (N*n+1)*(n+1)
+    A = np.zeros([space,space])
+    P1 = mat_generate(A,n,1)
+    P2 = mat_generate(A,n,2)
+    for i in range(realisations):
+        print(game_step(players,0,N,[P1,P2]))
+    
 
 realisations = 1
 n = 2 # number of coins
 N = 2 # number of players
 players = [pm.PlayerRand(N,n),pm.PlayerRand(N,n)]
 
-for i in range(realisations):
-    print(game_step(players,0,n,N))
+full_game(players,n,N,realisations)
