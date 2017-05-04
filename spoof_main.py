@@ -32,22 +32,30 @@ def game_step(players,history,N,P):
     payoff = np.zeros(N)
     guesses = np.zeros(N)
     coins = np.zeros(N)
-    #total_coins = 0
-    for i,j in enumerate(players):
-        coins[i] = j.choose_hand(history)
-        print(coins[i])
-    for i,j in enumerate(players):
-        guesses[i] = j.make_prediction(guesses[0:i],history)
-        print(guesses[i])
-        #total_coins += j.coins_hand
-    #for i,j in enumerate(players)
-    #    row,col = coord(N,total_coins,players)
-    #    payoff[i] = Q[row,col]
-    row,col = coord_simple(players[0].num_coins_hand,guesses[0],players[1].num_coins_hand,guesses[1])
-    payoff[0] = P[0][int(row),int(col)]
-    row,col = coord_simple(players[1].num_coins_hand,guesses[1],players[0].num_coins_hand,guesses[0])
-    payoff[1] = P[1][int(row),int(col)]
-    return payoff
+    
+    #for i,j in enumerate(players):
+    #    coins[i] = j.choose_hand(history)
+        #print(coins[i])
+    #for i,j in enumerate(players):
+    #    guesses[i] = j.make_prediction(guesses[0:i],history)
+        #print(guesses[i])
+        
+    players[0].choose_index()
+    players[1].choose_hand(history)
+    guesses[0] = players[0].game_prediction
+    guesses[1] = players[1].make_prediction(guesses,history)
+    
+    row1,col1 = coord_simple(players[0].num_coins_hand,guesses[0],players[1].num_coins_hand,guesses[1])
+    payoff[0] = P[0][int(row1),int(col1)]
+    row2,col2 = coord_simple(players[1].num_coins_hand,guesses[1],players[0].num_coins_hand,guesses[0])
+    payoff[1] = P[1][int(row2),int(col2)]
+    lastplay = int(col1)
+    
+    players[0].update_history(lastplay,P[0])
+    #for i,j in enumerate(players):
+    #    j.update_history(lastplay,P[i])
+        
+    return payoff,lastplay
 
 def full_game(players,n,N,realisations):
     space = (N*n+1)*(n+1)
@@ -58,9 +66,8 @@ def full_game(players,n,N,realisations):
         print(game_step(players,0,N,[P1,P2]))
     
 
-realisations = 1
+realisations = 10
 n = 2 # number of coins
 N = 2 # number of players
-players = [pm.PlayerRand(N,n),pm.PlayerRand(N,n)]
-
+players = [pm.PlayerLearner(N,n),pm.PlayerRand(N,n)]
 full_game(players,n,N,realisations)
