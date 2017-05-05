@@ -84,11 +84,6 @@ def full_game(players,n,N,realisations):
 realisations = 10
 n = 2 # number of coins
 N = 2 # number of players
-<<<<<<< HEAD
+
 players = [pm.PlayerLearner(N,n),pm.PlayerRand(N,n)]
 full_game(players,n,N,realisations)
-=======
-players = [pm.PlayerRand(N,n),pm.PlayerRand(N,n)]
-
-full_game(players,n,N,realisations)
->>>>>>> b97cabd724fe846fade8b23968da6ff94bc5d73c
