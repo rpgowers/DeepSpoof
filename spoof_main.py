@@ -1,6 +1,7 @@
 import numpy as np
 import itertools as it
 import player_method as pm
+import matplotlib.pylab as plt
 
 def coord_simple(x1,y1,x2,y2):
     row = 5*x1+y1
@@ -55,7 +56,7 @@ def game_step(players,history,N,P):
     #for i,j in enumerate(players):
     #    j.update_history(lastplay,P[i])
         
-    return payoff,lastplay
+    return payoff
 
 # Update the Qs in
 # j,k = #nr of players
@@ -77,13 +78,20 @@ def full_game(players,n,N,realisations):
     A = np.zeros([space,space])
     P1 = mat_generate(A,n,1)
     P2 = mat_generate(A,n,2)
+    payoff = np.zeros([realisations, 2])
     for i in range(realisations):
-        print(game_step(players,0,N,[P1,P2]))
+        payoff[i] = (game_step(players,0,N,[P1,P2]))
+        
+    return payoff
     
 
-realisations = 10
+realisations = 10000
 n = 2 # number of coins
 N = 2 # number of players
 
 players = [pm.PlayerLearner(N,n),pm.PlayerRand(N,n)]
-full_game(players,n,N,realisations)
+payoff = full_game(players,n,N,realisations)
+
+plt.plot(range(realisations), np.cumsum(payoff[:,0]))
+plt.plot(range(realisations), np.cumsum(payoff[:,1]))
+plt.show()
