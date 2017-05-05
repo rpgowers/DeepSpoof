@@ -57,6 +57,21 @@ def game_step(players,history,N,P):
         
     return payoff,lastplay
 
+# Update the Qs in
+# j,k = #nr of players
+# i,l = #nr of coins 
+
+# Current frequency
+# x_(i,v)^j = e^(Beta*Q_i^j)/Z 
+# y_i^j = OBSERVED frequency (i.e. history)
+# Update weights for choice
+# Alpha = memory, 0 is full memory and equal weights to past obs.
+#								 >0 more recent more weight
+#								  0 no memory
+# Beta = 	intensity, 0 is uniformly at random pick
+#										 >0 small historical advantage increases frequency
+# Q_i^j (t+1) = (1-Alpha)Q_i^j + sum_l P(i,l)  y^k
+
 def full_game(players,n,N,realisations):
     space = (N*n+1)*(n+1)
     A = np.zeros([space,space])
@@ -69,5 +84,11 @@ def full_game(players,n,N,realisations):
 realisations = 10
 n = 2 # number of coins
 N = 2 # number of players
+<<<<<<< HEAD
 players = [pm.PlayerLearner(N,n),pm.PlayerRand(N,n)]
 full_game(players,n,N,realisations)
+=======
+players = [pm.PlayerRand(N,n),pm.PlayerRand(N,n)]
+
+full_game(players,n,N,realisations)
+>>>>>>> b97cabd724fe846fade8b23968da6ff94bc5d73c
