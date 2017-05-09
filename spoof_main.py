@@ -8,6 +8,9 @@ def coord_simple(x1,y1,x2,y2):
     col = 5*x2+y2
     return row,col
 
+# A is the payoff matrix
+# n is number of coins
+# p is number of players
 def mat_generate(A,n,p):
     m = 2*n
     for x1,x2 in it.product(range(n+1),range(n+1)):
@@ -29,24 +32,36 @@ def mat_generate(A,n,p):
             
     return A
 
+def input_play(n):
+		while True: 
+			var = input("Pick the number of coins in your hand, between %i" % n)
+			if (var > 0) and (var < n) :
+				print("You picked: %i" % var)
+				break
+
+def input_guess(n):
+		while True: 
+			var = input("What is the total number of coins between you and the other player? It has to be between 0 and %i" % (2*n) )
+			if (var > 0) and (var < n) :
+				print("You guessed: %i" % var)
+				break
+
 def game_step(players,history,N,P):
-    payoff = np.zeros(N)
+    payoff 	= np.zeros(N)
     guesses = np.zeros(N)
-    coins = np.zeros(N)
+    coins 	= np.zeros(N)
     
-    #for i,j in enumerate(players):
-    #    coins[i] = j.choose_hand(history)
-        #print(coins[i])
-    #for i,j in enumerate(players):
-    #    guesses[i] = j.make_prediction(guesses[0:i],history)
-        #print(guesses[i])
-        
+    # First player picks his move
+    players[1].num_coins_hand = input_play(n)
+
     players[0].choose_index()
-    players[1].choose_hand(history)
-    guesses[0] = players[0].game_prediction
-    guesses[1] = players[1].make_prediction(guesses,history)
+    g0  = players[0].game_prediction
+		print("Player 1 guesses: %i", % g0)
+		# history is a dead parameter
+
+    g1 = input_guess(n) 
     
-    row1,col1 = coord_simple(players[0].num_coins_hand,guesses[0],players[1].num_coins_hand,guesses[1])
+    row1,col1 = coord_simple(players[0].num_coins_hand,g0,players[1].num_coins_hand,g1)
     payoff[0] = P[0][int(row1),int(col1)]
     row2,col2 = coord_simple(players[1].num_coins_hand,guesses[1],players[0].num_coins_hand,guesses[0])
     payoff[1] = P[1][int(row2),int(col2)]
@@ -57,21 +72,6 @@ def game_step(players,history,N,P):
     #    j.update_history(lastplay,P[i])
         
     return payoff
-
-# Update the Qs in
-# j,k = #nr of players
-# i,l = #nr of coins 
-
-# Current frequency
-# x_(i,v)^j = e^(Beta*Q_i^j)/Z 
-# y_i^j = OBSERVED frequency (i.e. history)
-# Update weights for choice
-# Alpha = memory, 0 is full memory and equal weights to past obs.
-#								 >0 more recent more weight
-#								  0 no memory
-# Beta = 	intensity, 0 is uniformly at random pick
-#										 >0 small historical advantage increases frequency
-# Q_i^j (t+1) = (1-Alpha)Q_i^j + sum_l P(i,l)  y^k
 
 def full_game(players,n,N,realisations):
     space = (N*n+1)*(n+1)
