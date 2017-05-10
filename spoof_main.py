@@ -59,7 +59,7 @@ def game_step(players,history,N,P):
     players[0].choose_index()
     guesses[0]  = players[0].game_prediction
     print("Player 1 guesses: %i" % guesses[0])
-# history is a dead parameter
+    # history is a dead parameter
 
     guesses[1] = input_guess(n) 
     
@@ -75,6 +75,9 @@ def game_step(players,history,N,P):
     #for i,j in enumerate(players):
     #    j.update_history(lastplay,P[i])
         
+    print("Your oppnent had    : %i coins " % players[0].num_coins_hand)
+    print("You scored          : %i " % payoff[0])
+    print("The computer scored : %i " % payoff[1] 
     return payoff
 
 def full_game(players,n,N,realisations):
@@ -91,8 +94,8 @@ def full_game(players,n,N,realisations):
 
 realisations = 20
 
-# No touch, no break...keep alive and next time I will bring to you
-
+# No touch, no break...keep alive and next time good bring to you
+# https://www.youtube.com/watch?v=To2-xGxTiuU
 n = 2 # number of coins
 N = 2 # number of players
 
@@ -100,7 +103,7 @@ players = [pm.PlayerLearner(N,n),pm.PlayerRand(N,n)]
 payoff = full_game(players,n,N,realisations)
 
 plt.plot(range(realisations), np.cumsum(payoff[:,0]),label='l33t ov3r10rD')
-plt.plot(range(realisations), np.cumsum(payoff[:,1]),label='0uNy h00man haXx3r')
+plt.plot(range(realisations), np.cumsum(payoff[:,1]),label='puNy h00man haXx3r')
 plt.legend()
 plt.show()
 savefig('win.png',bbox_inches='tight')
