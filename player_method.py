@@ -17,8 +17,8 @@ class Player(object):
         self.Q = np.zeros(self.L)                                                    # Starting weights
         self.T = 0                                                                                 # this is the internal clock
 
-        self.alpha = 0.5                # Memory: 0 full recall
-        self.beta = 1                        # Intesity: larger means more weight on small advantages
+        self.alpha = 0.1                # Memory: 0 full recall
+        self.beta = 10                        # Intesity: larger means more weight on small advantages
 
     def choose_hand(self,history):
         pass

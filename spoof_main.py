@@ -54,14 +54,14 @@ def game_step(players,history,N,P):
     coins		= np.zeros(N)
     
     # First player picks his move
-    players[1].num_coins_hand = input_play(n)
+    players[1].num_coins_hand = 0#input_play(n)
 
     players[0].choose_index()
     guesses[0]  = players[0].game_prediction
     print("Player 1 guesses: %i" % guesses[0])
     # history is a dead parameter
 
-    guesses[1] = input_guess(n) 
+    guesses[1] = 0#input_guess(n) 
     
     row1,col1 = coord_simple(players[0].num_coins_hand,guesses[0],players[1].num_coins_hand,guesses[1])
     payoff[0] = P[0][int(row1),int(col1)]
@@ -76,8 +76,8 @@ def game_step(players,history,N,P):
     #    j.update_history(lastplay,P[i])
         
     print("Your oppnent had    : %i coins " % players[0].num_coins_hand)
-    print("You scored          : %i " % payoff[0])
-    print("The computer scored : %i " % payoff[1]) 
+    print("You scored          : %i " % payoff[1])
+    print("The computer scored : %i " % payoff[0]) 
     return payoff
 
 def full_game(players,n,N,realisations):
@@ -91,7 +91,7 @@ def full_game(players,n,N,realisations):
     return payoff
     
 
-realisations = 20
+realisations = 200
 
 # No touch, no break...keep alive and next time good bring to you
 # https://www.youtube.com/watch?v=To2-xGxTiuU
@@ -105,4 +105,4 @@ plt.plot(range(realisations), np.cumsum(payoff[:,0]),label='l33t ov3r10rD')
 plt.plot(range(realisations), np.cumsum(payoff[:,1]),label='puNy h00man haXx3r')
 plt.legend()
 plt.show()
-savefig('win.png',bbox_inches='tight')
+plt.savefig('win.png',bbox_inches='tight')
