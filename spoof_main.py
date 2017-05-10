@@ -77,7 +77,7 @@ def game_step(players,history,N,P):
         
     print("Your oppnent had    : %i coins " % players[0].num_coins_hand)
     print("You scored          : %i " % payoff[0])
-    print("The computer scored : %i " % payoff[1] 
+    print("The computer scored : %i " % payoff[1]) 
     return payoff
 
 def full_game(players,n,N,realisations):
@@ -88,7 +88,6 @@ def full_game(players,n,N,realisations):
     payoff = np.zeros([realisations, 2])
     for i in range(realisations):
         payoff[i] = (game_step(players,0,N,[P1,P2]))
-        
     return payoff
     
 
