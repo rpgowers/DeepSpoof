@@ -59,7 +59,7 @@ def game_step(players,history,N,P):
 # Update weights for choice
 # Alpha = memory, 0 is full memory and equal weights to past obs.
 #								 >0 more recent more weight
-#								  0 no memory
+#								  1 no memory
 # Beta = 	intensity, 0 is uniformly at random pick
 #										 >0 small historical advantage increases frequency
 # Q_i^j (t+1) = (1-Alpha)Q_i^j + sum_l P(i,l)  y^k
