@@ -1,4 +1,5 @@
 import random
+import numpy as np
 from heapq import nsmallest
 
 class Player(object):
@@ -8,13 +9,47 @@ class Player(object):
         self.num_coins = num_coins
         self.num_coins_hand = None
         self.game_prediction = None
+        # frequency of myself and the observed events of my opponent
+        self.L = (num_coins+1)*(num_players*num_coins+1)
+        self.frequency_me = np.ones(self.L)/self.L
+        self.historic = np.zeros(self.L)
+        self.Q = np.zeros(self.L)
+        self.T = 0 # this is the internal clock
+        # these are the learning parameters
+        self.alpha = 0.5
+        self.beta = 1
 
     def choose_hand(self,history):
         pass
 
     def make_prediction(self,previous_guesses,history):
         pass
-
+    
+    def update_history(history):
+        pass
+    
+class PlayerLearner(Player):
+    def choose_index(self):
+        index = np.random.choice(np.arange(self.L),p=self.frequency_me)
+    #def choose_hand(self):
+        self.num_coins_hand = index//(self.num_players*self.num_coins+1)
+    #def make_prediction(self,previous_guesses,history):
+        self.game_prediction = index%(self.num_players*self.num_coins+1)
+    def update_history(self,lastplay,P):
+        self.T += 1 # update clock by one game step
+        self.historic[lastplay] += 1
+        
+        Z = 0
+        for i in range(self.L):
+            temp = 0
+            for j in range(self.L):
+                temp += P[i,j]*self.historic[j]/self.T
+            
+            self.Q[i] = (1-self.alpha)*self.Q[i]+temp
+            Z += np.exp(self.beta*self.Q[i]) 
+            
+        self.frequency = np.exp(self.beta*self.Q)/Z
+            
 class PlayerRand(Player):
 
     def choose_hand(self,history):
@@ -59,3 +94,4 @@ class PlayerExEx(Player):
                 self.game_prediction = predicition
                 return predicition
 
+#player_dict = {"rand":PlayerRand(),"mean":PlayerMean(),"exex":PlayerExEx}
