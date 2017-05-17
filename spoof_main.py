@@ -12,7 +12,9 @@ def coord_simple(x1,y1,x2,y2):
 
 # A is the payoff matrix
 # n is number of coins
-# p is number of players
+# p is the player number, 2 is 
+# x1,x2 is your/their choice of coins
+# y1,x2 is your/their guess
 def mat_generate(A,n,p):
     m = 2*n
     for x1,x2 in it.product(range(n+1),range(n+1)):
@@ -23,7 +25,7 @@ def mat_generate(A,n,p):
                 A[row,col] = -9
             elif y1 > x1+n:
                 A[row,col] = -9
-            elif (y1 == y2) & (p == 2):
+            elif (y1 == y2) and (p == 2):
                 A[row,col] = -9
             elif y1 == x1+x2:
                 A[row,col] = 1
@@ -83,13 +85,15 @@ def game_step(players,history,N,P):
 def full_game(players,n,N,realisations):
     space = (N*n+1)*(n+1)
     A = np.zeros([space,space])
+    B = np.zeros([space,space])
     P1 = mat_generate(A,n,1)
-    P2 = mat_generate(A,n,2)
+    #print(P1)
+    P2 = mat_generate(B,n,2)
     payoff = np.zeros([realisations, 2])
     for i in range(realisations):
         payoff[i] = (game_step(players,0,N,[P1,P2]))
+
     return payoff
-    
 
 realisations = 200
 
